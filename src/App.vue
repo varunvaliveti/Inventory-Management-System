@@ -1,26 +1,33 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app">
+    <header>
+      <h1>SQL Query Runner</h1>
+    </header>
+    <QueryRunner />
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import QueryRunner from "./components/QueryRunner.vue";
 
 export default {
-  name: 'App',
   components: {
-    HelloWorld
-  }
-}
+    QueryRunner,
+  },
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+header {
+  background-color: #007bff;
+  color: white;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  padding: 1rem 0;
 }
 </style>
+ 

@@ -31,18 +31,110 @@
       <h2>Error:</h2>
       <p>{{ error }}</p>
     </div>
+
+    <!-- Bar Chart for Sales by Month -->
+    <div class="chart">
+      <h2>Sales by Month</h2>
+      <Bar
+        :data="monthlySalesData"
+        :options="chartOptions"
+      />
+    </div>
+
+    <!-- Pie Chart for Sales by Vendor -->
+    <div class="chart">
+      <h2>Sales by Vendor</h2>
+      <Pie
+        :data="vendorSalesData"
+        :options="chartOptions"
+      />
+    </div>
+
+    <!-- Bar Chart for Customer Spending -->
+    <div class="chart">
+      <h2>Customer Spending</h2>
+      <Bar
+        :data="customerSpendingData"
+        :options="chartOptions"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import { Bar, Pie } from "vue-chartjs";
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  ArcElement,
+} from "chart.js";
+
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement);
 
 export default {
+  components: {
+    Bar,
+    Pie,
+  },
   data() {
     return {
+      chartOptions: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top'
+        },
+        title: {
+          display: false
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    },
       query: "",
       results: [],
       error: null,
+      monthlySalesData: {
+        labels: ["October 2024", "November 2024"],
+        datasets: [
+          {
+            label: "Sales ($)",
+            data: [1448.97, 4109.95],
+            backgroundColor: "rgba(75, 192, 192, 0.6)",
+          },
+        ],
+      },
+      vendorSalesData: {
+        labels: ["NVIDIA", "AMD", "ASUS", "MSI"],
+        datasets: [
+          {
+            label: "Sales by Vendor ($)",
+            data: [4799.97, 1399.98, 499.99, 389.97],
+            backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0"],
+          },
+        ],
+      },
+      customerSpendingData: {
+        labels: ["Alice Johnson", "Bob Smith", "Charlie Davis", "Diana Carter", "Ethan Hunt"],
+        datasets: [
+          {
+            label: "Customer Spending ($)",
+            data: [3199.98, 699.99, 499.99, 389.97, 499.98],
+            backgroundColor: "rgba(153, 102, 255, 0.6)",
+          },
+        ],
+      },
     };
   },
   methods: {
@@ -54,10 +146,11 @@ export default {
         const response = await axios.post("http://127.0.0.1:5000/run_query", {
           query: this.query,
         });
+
         if (response.data.success) {
           this.results = response.data.results || [];
         } else {
-          this.error = response.data.error || "An unknown error occurred.";
+          this.error = response.data.error;
         }
       } catch (err) {
         this.error = err.message;
@@ -69,39 +162,23 @@ export default {
 
 <style>
 .query-runner {
-  padding: 2rem;
+  padding: 20px;
 }
-textarea {
-  width: 100%;
-  font-family: monospace;
+
+.chart {
+  margin: 4rem auto; 
+  width: 600px;
+  height: 400px;
+  position: relative;
+  background: white;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
-button {
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-button:hover {
-  background-color: #0056b3;
-}
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-}
-th,
-td {
-  border: 1px solid #ddd;
-  padding: 8px;
-}
-th {
-  background-color: #f4f4f4;
-}
-.error {
-  color: red;
-  margin-top: 1rem;
+
+
+.chart canvas {
+  width: 100% !important;
+  height: 100% !important;
 }
 </style>
 

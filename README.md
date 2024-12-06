@@ -1,4 +1,8 @@
 # frontend
+## To RUN: On local create two folders, frontend and backend. 
+## NEXT, copy app.py file on this repo into backend folder, and all other files in this repo into frontend folder. 
+## Next, run the app.py file in the backend folder, and run npm run serve whilst in the frontend folder. 
+
 
 ## Project setup
 ```
